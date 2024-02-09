@@ -54,4 +54,4 @@ The assignment should be submitted as a fork of this repository. You should prov
 
 Additionally, provide a brief document summarizing the steps taken, any challenges faced, and potential improvements for future implementations. Finally, explain the result of the PoC, should the product team adopt this design?
 
-> **_NOTE_**: You have between two and four hours to complete and submit this technical assessment.
+> **_NOTE_**: We recommend that you spend between two and four hours to complete and submit this technical assessment.
