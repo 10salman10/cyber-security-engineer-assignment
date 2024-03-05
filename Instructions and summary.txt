@@ -1,0 +1,60 @@
+AWS infrastructure deployment:
+
+The terraform code is present in the main.tf file which will create the following resources:
+
+1. Main VPC - 10.0.0.0/16
+2. VPN public subnet
+3. Web server private subnet
+4. EC2 instance for VPN server with user data
+5. EC2 instance for Web server with user data
+6. Security groups and public IP
+7. Provider and region
+
+To deploy the terraform code in main.tf, we can user CLI with terraform installed and perform the below terraform commands:
+
+1. # terraform init
+2. # terraform plan
+3. # terraform apply
+
+
+Steps to configure Laptop:
+
+1. Genrate a public private key pair for asymetric encryption using wireguard command line
+
+wg genkey | tee privatekey | wg pubkey > publickey
+
+2. Configuration for wg0.conf 
+
+[Interface]
+PrivateKey = <Engineer's private key>
+Address = 10.0.2.2 <Client's VPN IP address> 
+
+[Peer]
+PublicKey = <Server's public key>
+Endpoint = 54.239.98.3:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+
+3. Start wireguard
+
+sudo wg-quick up wg0
+
+4. Test connectivity
+
+curl https://10.0.2.10
+
+
+Summary:
+
+Using this setup we have achieved the product teams requirement for setting up a web server accessble to engineers over private network. This is a secure setup as the web server is only accessible from the VPN server. Hence, the employees will be able to connect only if the authenticate successfully to the VPN.
+
+However, such a setup would mean that we are exposing the VPN EC2 to the public internet which can potentially be a subject to DDOS or other attacks. Also, the management of VPN server can be an overhead.
+
+
+A recommended solution would be to set up a site-to-site VPN to AWS VPC and have a transit gateway or VPN gateway. This way we can have a private connection to AWS VPC from local on-prem network and access private website.
+
+However, if the requirement is to connect from engineers laptop directly, then the current setup with wireguard is a preferred option.
+
+
+
+
